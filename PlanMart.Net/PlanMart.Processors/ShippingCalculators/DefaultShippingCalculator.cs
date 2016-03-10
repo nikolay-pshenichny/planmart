@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using PlanMart.Processors.Constants;
 
-namespace PlanMart.Processors.TaxCalculators
+namespace PlanMart.Processors.ShippingCalculators
 {
     /// <summary>
     /// Implements the following Shipping Cost calculation logic:

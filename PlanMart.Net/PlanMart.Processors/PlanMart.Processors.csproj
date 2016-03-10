@@ -53,11 +53,11 @@
     <Compile Include="OrderValidationRules\IOrderValidationRule.cs" />
     <Compile Include="PlanMartOrderProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TaxCalculators\DefaultShippingCalculator.cs" />
-    <Compile Include="TaxCalculators\DefaultRewardPointsCalculator.cs" />
+    <Compile Include="ShippingCalculators\DefaultShippingCalculator.cs" />
+    <Compile Include="RewardPointsCalculators\DefaultRewardPointsCalculator.cs" />
     <Compile Include="TaxCalculators\DefaultTaxCalculator.cs" />
-    <Compile Include="TaxCalculators\IRewardPointsCalculator.cs" />
-    <Compile Include="TaxCalculators\IShippingCalculator.cs" />
+    <Compile Include="RewardPointsCalculators\IRewardPointsCalculator.cs" />
+    <Compile Include="ShippingCalculators\IShippingCalculator.cs" />
     <Compile Include="TaxCalculators\ITaxCalculator.cs" />
   </ItemGroup>
   <ItemGroup>

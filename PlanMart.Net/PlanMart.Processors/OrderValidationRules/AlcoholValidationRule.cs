@@ -30,9 +30,9 @@ namespace PlanMart.Processors.OrderValidationRules
 
                 //TODO: Is everything in LocalDates or UTC, or mix?
                 var birthday = new LocalDate(order.Customer.BirthDate.Year, order.Customer.BirthDate.Month, order.Customer.BirthDate.Day);
-                var today = new LocalDate();
-                var period = Period.Between(birthday, today);
-                if ((period.Years < _minimumDrinkingAgeInUS) && (order.ShippingRegion == "US"))
+                var orderDate = new LocalDate(order.Placed.Year, order.Placed.Month, order.Placed.Day);
+                var period = Period.Between(birthday, orderDate);
+                if (period.Years < _minimumDrinkingAgeInUS)
                 {
                     return new ValidationRuleResult(false, "Alcohol may only be shipped to customers age 21 or over in the US");
                 }

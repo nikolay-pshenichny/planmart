@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Moq, Version=4.2.1510.2205, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="nunit.framework, Version=3.0.5813.39031, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.0.1\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
@@ -44,8 +48,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OrderValidationRules\AlcoholValidationRule\ValidateShould.cs" />
+    <Compile Include="OrderValidationRules\OrderCompletenessValidationRule\ValidateShould.cs" />
+    <Compile Include="OrderValidationRules\ShippingValidationRule\ValidateShould.cs" />
     <Compile Include="PlanMartOrderProcessorTests.cs" />
+    <Compile Include="PlanMartOrderProcessor\ProcessOrderShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RewardPointsCalculators\DefaultRewardPointsCalculator\CalculateShould.cs" />
+    <Compile Include="ShippingCalculators\DefaultShippingCalculator\CalculateShould.cs" />
+    <Compile Include="TaxCalculators\DefaultTaxCalculator\CalculateShould.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

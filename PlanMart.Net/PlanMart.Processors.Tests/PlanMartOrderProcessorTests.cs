@@ -4,6 +4,9 @@ using NUnit.Framework;
 
 namespace PlanMart.Processors.Tests
 {
+    /// <summary>
+    /// Note: This is the original UnitTest (was provided in the default implementation). No changes were made here. Additional tests are in separate files.
+    /// </summary>
     [TestFixture]
     public class PlanMartOrderProcessorTests
     {
@@ -18,7 +21,7 @@ namespace PlanMart.Processors.Tests
             order.Items.Add(new ProductOrder(new Product(20, 2, ProductType.Alcohol), 3));
             order.Items.Add(new ProductOrder(new Product(25, 3, ProductType.Food), 3));
 
-            var processor = new PlanMartOrderProcessor();
+            var processor = new PlanMart.Processors.PlanMartOrderProcessor();
             var isValid = processor.ProcessOrder(order);
             var tax = order.LineItems.SingleOrDefault(x => x.Type == LineItemType.Tax);
             var shipping = order.LineItems.SingleOrDefault(x => x.Type == LineItemType.Shipping);

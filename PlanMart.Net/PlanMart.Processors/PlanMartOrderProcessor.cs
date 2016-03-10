@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using PlanMart.Processors.OrderValidationRules;
 using PlanMart.Processors.TaxCalculators;
+using PlanMart.Processors.ShippingCalculators;
+using PlanMart.Processors.RewardPointsCalculators;
 using System;
 
 namespace PlanMart.Processors
@@ -13,9 +15,10 @@ namespace PlanMart.Processors
         private readonly IOrderValidationRule[] _orderValidationRules;
 
         private readonly ITaxCalculator _taxCalculator;
-        private readonly IShippingCalculator _shippingCalculator;
-        private readonly IRewardPointsCalculator _rewardPointsCalculator;
 
+        private readonly IShippingCalculator _shippingCalculator;
+
+        private readonly IRewardPointsCalculator _rewardPointsCalculator;
 
         public PlanMartOrderProcessor()
             // "Inject" default implementations of the required dependencies
@@ -49,10 +52,20 @@ namespace PlanMart.Processors
                 throw new ArgumentNullException("Tax calculator is required");
             }
 
-            this._orderValidationRules = orderValidationRules;
-            this._taxCalculator = taxCalculator;
-            this._shippingCalculator = shippingCalculator;
-            this._rewardPointsCalculator = rewardPointsCalculator;
+            if (shippingCalculator == null)
+            {
+                throw new ArgumentNullException("Shipping calculator is required");
+            }
+
+            if (rewardPointsCalculator == null)
+            {
+                throw new ArgumentNullException("Reward Points calculator is required");
+            }
+
+            _orderValidationRules = orderValidationRules;
+            _taxCalculator = taxCalculator;
+            _shippingCalculator = shippingCalculator;
+            _rewardPointsCalculator = rewardPointsCalculator;
         }
 
         public bool ProcessOrder(Order order)
@@ -73,7 +86,10 @@ namespace PlanMart.Processors
                     return false;
                 }
             }
-            
+
+
+            //TODO: Consider refactoring Calculators to implement the same interface in order to replace the following code with a foreach() loop
+            //TODO: Do not add a LineItem, if calculation result is 0 (Exempt, Non Applicable, etc)
             // Tax
             order.LineItems.Add(new LineItem(LineItemType.Tax, this._taxCalculator.Calculate(order)));
 

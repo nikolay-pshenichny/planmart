@@ -1,4 +1,4 @@
-﻿namespace PlanMart.Processors.TaxCalculators
+﻿namespace PlanMart.Processors.RewardPointsCalculators
 {
     public interface IRewardPointsCalculator
     {   

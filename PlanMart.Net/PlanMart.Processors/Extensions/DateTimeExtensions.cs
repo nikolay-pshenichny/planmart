@@ -8,6 +8,7 @@ namespace PlanMart.Processors.Extensions
     /// TODO: Do we to take into account Canadian/Western/Estern/etc holidays?
     /// TODO: There are a lot of LINQ here. Methods will be slow. Do we need to optimize them?
     /// TODO: IsGoodFriday() is not implemented and will return False by default
+    /// TODO: Add unit tests for these extensions
     /// </summary>
     public static class DateTimeExtensions
     {

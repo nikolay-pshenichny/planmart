@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using PlanMart.Processors.Constants;
 
 namespace PlanMart.Processors.TaxCalculators
@@ -10,6 +11,8 @@ namespace PlanMart.Processors.TaxCalculators
     ///        Food items shipped to CA, NY
     ///        Clothing items shipped to CT
     ///    Orders to nonprofits are exempt from all tax and shipping
+    ///    
+    /// Sales tax should be rounded using the round half up strategy
     /// </summary>
     public class DefaultTaxCalculator : ITaxCalculator
     {
@@ -27,6 +30,8 @@ namespace PlanMart.Processors.TaxCalculators
                 }
             }
 
+            //TODO: One of the requirements is to use the round half up strategy for Tax calculation, but it doesn't seem to be reflected in the default UnitTest
+            // return Math.Round(result, MidpointRounding.AwayFromZero);
             return result;
         }
 

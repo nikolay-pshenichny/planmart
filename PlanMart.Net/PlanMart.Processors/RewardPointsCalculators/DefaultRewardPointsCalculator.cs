@@ -3,7 +3,7 @@ using System;
 using PlanMart.Processors.Constants;
 using PlanMart.Processors.Extensions;
 
-namespace PlanMart.Processors.TaxCalculators
+namespace PlanMart.Processors.RewardPointsCalculators
 {
     /// <summary>
     /// Implements the following Reward Points calculation logic:
