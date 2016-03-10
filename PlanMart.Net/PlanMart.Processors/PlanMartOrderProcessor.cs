@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using PlanMart.Processors.OrderValidationRules;
 using PlanMart.Processors.TaxCalculators;
 using System;
@@ -19,12 +18,26 @@ namespace PlanMart.Processors
 
 
         public PlanMartOrderProcessor()
-            : this(new IOrderValidationRule[] { new AlcoholValidationRule(), new ShippingValidationRule() }, new DefaultTaxCalculator(), new DefaultShippingCalculator(), new DefaultRewardPointsCalculator())
+            // "Inject" default implementations of the required dependencies
+            // TODO: consider using a DI framework
+            : this(new IOrderValidationRule[] 
+                        {
+                            new OrderCompletenessValidationRule(),
+                            new AlcoholValidationRule(),
+                            new ShippingValidationRule()
+                        }, 
+                  new DefaultTaxCalculator(), 
+                  new DefaultShippingCalculator(), 
+                  new DefaultRewardPointsCalculator())
         {
             //
         }
 
-        public PlanMartOrderProcessor(IOrderValidationRule[] orderValidationRules, ITaxCalculator taxCalculator, IShippingCalculator shippingCalculator, IRewardPointsCalculator rewardPointsCalculator)
+        public PlanMartOrderProcessor(
+            IOrderValidationRule[] orderValidationRules, 
+            ITaxCalculator taxCalculator, 
+            IShippingCalculator shippingCalculator, 
+            IRewardPointsCalculator rewardPointsCalculator)
         {
             if ((orderValidationRules == null) || (!orderValidationRules.Any()))
             {
@@ -49,42 +62,18 @@ namespace PlanMart.Processors
                 throw new ArgumentNullException("order");
             }
 
-            //TODO: Consider moving this to ValidationRules
-            if (order.Customer == null)
-            {
-                throw new InvalidOperationException("Order must contain Customer information");
-            }
-
-            if ((order.Items == null) || (!order.Items.Any()))
-            {
-                // An Order should not be empty (the customer should be ordering something!)
-                throw new InvalidOperationException("Order must contain at least one item");
-            }
-
-            if (order.Items.Any(x => x.Product == null))
-            {
-                throw new InvalidOperationException("Product information must be assigned to all items in the order");
-            }
-
-            if (order.Items.Any(x=> x.Quantity <= 0))
-            {
-                throw new InvalidOperationException("All Items must have a valid quantity");
-            }
-
-            // Validate that we can process the order
-            foreach (var validationRule in this._orderValidationRules)
+            // Validate
+            foreach (var validationRule in _orderValidationRules)
             {
                 var validationResult = validationRule.Validate(order);
 
-                // Since we don't need to collect all failed rules, lets exist asap if one of the validation rules failed.
+                // Since we don't need to collect information from all failed rules, lets exist ASAP if one of the validation rules failed.
                 if (!validationResult.Valid)
                 {
                     return false;
                 }
             }
-
-
-
+            
             // Tax
             order.LineItems.Add(new LineItem(LineItemType.Tax, this._taxCalculator.Calculate(order)));
 

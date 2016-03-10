@@ -1,34 +1,38 @@
 ﻿using System.Linq;
+using PlanMart.Processors.Constants;
 
 namespace PlanMart.Processors.TaxCalculators
 {
+    /// <summary>
+    /// Implements the following Shipping Cost calculation logic:
+    ///    Orders to nonprofits are exempt from all tax and shipping
+    ///    Shipping is $10 for orders under 20 pounds in the continental US
+    ///    Shipping is $20 for orders 20 pounds or over in the continental US
+    ///    Shipping for orders to the non-continental US is $35
+    /// </summary>
     public class DefaultShippingCalculator : IShippingCalculator
     {
-        private const decimal Tax = 0.08m; // 8%
+        private const decimal WeightThreshold = 20.0m;
+        private const decimal PriceForOrdersWithWeightOverOrEqualToThreshold = 20.0m;
+        private const decimal PriceForOrdersWithWeightBelowThreshold = 10.0m;
+        private const decimal PriceForOrdersToNonContinentalUS = 35.0m;
 
         public decimal Calculate(Order order)
         {
-            /*
-                Orders to nonprofits are exempt from all tax and shipping
-                Shipping is $10 for orders under 20 pounds in the continental US
-                Shipping is $20 for orders 20 pounds or over in the continental US
-                Shipping for orders to the non-continental US is $35
-            */
-
-            if (order.Customer.IsNonProfit)
-            {
-                return 0.0m;
-            }
-
             decimal result = 0.0m;
 
-            if (!IsContinentalUS(order.ShippingRegion))
+            if (!order.Customer.IsNonProfit)
             {
-                result = 35m;
-            }
-            else
-            {
-                result = (CalculateTotalWeight(order) >= 20.0m) ? 20m : 10m;
+                if (!IsContinentalUS(order.ShippingRegion))
+                {
+                    result = PriceForOrdersToNonContinentalUS;
+                }
+                else
+                {
+                    result = (CalculateTotalWeight(order) >= WeightThreshold)
+                                ? PriceForOrdersWithWeightOverOrEqualToThreshold
+                                : PriceForOrdersWithWeightBelowThreshold;
+                }
             }
 
             return result;
@@ -36,7 +40,7 @@ namespace PlanMart.Processors.TaxCalculators
 
         private bool IsContinentalUS(string shippingRegion)
         {
-            bool result = shippingRegion != "HI";
+            bool result = shippingRegion != StateAbbreviations.Hawaii;
             return result;
         }
 

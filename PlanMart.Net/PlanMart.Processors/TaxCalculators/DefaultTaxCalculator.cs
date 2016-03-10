@@ -1,7 +1,16 @@
 ﻿using System.Linq;
+using PlanMart.Processors.Constants;
 
 namespace PlanMart.Processors.TaxCalculators
 {
+    /// <summary>
+    /// Implements the following Tax calculation logic:
+    ///    All items are taxed at 8% unless exempt
+    ///    The following types of items are exempt from tax:
+    ///        Food items shipped to CA, NY
+    ///        Clothing items shipped to CT
+    ///    Orders to nonprofits are exempt from all tax and shipping
+    /// </summary>
     public class DefaultTaxCalculator : ITaxCalculator
     {
         private const decimal Tax = 0.08m; // 8%
@@ -9,14 +18,6 @@ namespace PlanMart.Processors.TaxCalculators
         public decimal Calculate(Order order)
         {
             decimal result = 0.0m;
-
-            /*
-                All items are taxed at 8% unless exempt
-                The following types of items are exempt from tax:
-                    Food items shipped to CA, NY
-                    Clothing items shipped to CT
-                Orders to nonprofits are exempt from all tax and shipping
-            */
 
             foreach (var item in order.Items)
             {
@@ -31,16 +32,18 @@ namespace PlanMart.Processors.TaxCalculators
 
         private bool ItemIsExempt(ProductOrder item, string shippingRegion, bool isNonProfit)
         {
-            bool result = isNonProfit;
             /*
                 The following types of items are exempt from tax:
                     Food items shipped to CA, NY
                     Clothing items shipped to CT
                 Orders to nonprofits are exempt from all tax and shipping
             */
-            result |= ((item.Product.Type == ProductType.Food) && (new[] { "CA", "NY" }.Contains(shippingRegion)));
 
-            result |= ((item.Product.Type == ProductType.Clothing) && (shippingRegion == "CT"));
+            bool result = isNonProfit;
+
+            result |= ((item.Product.Type == ProductType.Food) && (new[] { StateAbbreviations.California, StateAbbreviations.NewYork }.Contains(shippingRegion)));
+
+            result |= ((item.Product.Type == ProductType.Clothing) && (shippingRegion == StateAbbreviations.Connecticut));
 
             return result;
         }

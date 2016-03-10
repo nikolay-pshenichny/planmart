@@ -1,15 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using NodaTime;
+using PlanMart.Processors.Constants;
 
 namespace PlanMart.Processors.OrderValidationRules
 {
     public class AlcoholValidationRule : IOrderValidationRule
     {
-        private static string[] _statesToWhichAlcoholCanNotBeShipped = new[] { "VA", "NC", "SC", "TN", "AK", "KY", "AL" };
+        private static string[] _statesToWhichAlcoholCanNotBeShipped = new[] 
+            {
+                StateAbbreviations.Virginia,
+                StateAbbreviations.NorthCarolina,
+                StateAbbreviations.SouthCarolina,
+                StateAbbreviations.Tennessee,
+                StateAbbreviations.Alaska,
+                StateAbbreviations.Kentucky,
+                StateAbbreviations.Alabama
+            };
+
         private const int _minimumDrinkingAgeInUS = 21;
 
         public ValidationRuleResult Validate(Order order)
@@ -30,7 +37,6 @@ namespace PlanMart.Processors.OrderValidationRules
                     return new ValidationRuleResult(false, "Alcohol may only be shipped to customers age 21 or over in the US");
                 }
             }
-
 
             return new ValidationRuleResult(true);
 
