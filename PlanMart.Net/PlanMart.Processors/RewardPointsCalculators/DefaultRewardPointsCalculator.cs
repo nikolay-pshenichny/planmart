@@ -35,8 +35,26 @@ namespace PlanMart.Processors.RewardPointsCalculators
             return points;
         }
 
+        /// <summary>
+        /// Calculates if we need to double the reward points.
+        /// Points should be doubled if the custormer uses PlanMart rewards card or if 3 of the following criteria were met:
+        ///   - Multiple products in the same order
+        ///   - Orders over $200 shipped to US regions other than AZ
+        ///   - Orders over $100 shipped to AZ
+        ///   - Orders on Holidays (particular)
+        /// </summary>
+        /// <param name="order"></param>
+        /// <param name="totalOrderAmount"></param>
+        /// <returns></returns>
         private bool IsDoublePoints(Order order, decimal totalOrderAmount)
         {
+            // If the order's customer uses Rewards card, we should double the points
+            if (order.PaymentMethod == PaymentMethod.PlanMartRewardsCard)
+            {
+                return true;
+            }
+
+            // Else: Let's check if the order meets our expectations
             const int requiredCriteriaCount = 3;
 
             Func<bool> multipleDifferentProducts = () => order.Items.Select(x => x.Product.Type).Distinct().Count() > 1;
