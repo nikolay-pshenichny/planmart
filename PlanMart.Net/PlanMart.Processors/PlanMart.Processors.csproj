@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NodaTime, Version=1.3.0.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NodaTime.1.3.1\lib\net35-Client\NodaTime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,14 +44,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\OrderExtensions.cs" />
+    <Compile Include="OrderValidationRules\ShippingValidationRule.cs" />
+    <Compile Include="OrderValidationRules\AlcoholValidationRule.cs" />
+    <Compile Include="OrderValidationRules\ValidationRuleResult.cs" />
+    <Compile Include="OrderValidationRules\IOrderValidationRule.cs" />
     <Compile Include="PlanMartOrderProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TaxCalculators\DefaultShippingCalculator.cs" />
+    <Compile Include="TaxCalculators\DefaultRewardPointsCalculator.cs" />
+    <Compile Include="TaxCalculators\DefaultTaxCalculator.cs" />
+    <Compile Include="TaxCalculators\IRewardPointsCalculator.cs" />
+    <Compile Include="TaxCalculators\IShippingCalculator.cs" />
+    <Compile Include="TaxCalculators\ITaxCalculator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PlanMart\PlanMart.csproj">
       <Project>{18139AA4-27A7-4BA3-9676-B372EFB38734}</Project>
       <Name>PlanMart</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
